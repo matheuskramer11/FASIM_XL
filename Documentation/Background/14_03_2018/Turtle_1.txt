@@ -1,0 +1,77 @@
+/ This program publishes randomly
+-
+generated velocity
+2
+// messages for turtlesim .
+3
+#include <ros / ros . h>
+4
+#include <geometry_msgs/Twist . h>
+// For geometry_msgs:: Twist
+5
+#include <s t d l i b . h>
+// For rand() and RAND_MAX
+6
+7
+int  main ( int  argc ,  char  ** argv )  {
+8
+// Initialize the ROS system and become a node.
+9
+ros : : i n i t ( argc ,  argv ,  " publish_velocity " ) ;
+10
+ros : : NodeHandle nh ;
+11
+12
+// Create a publisher object .
+13
+ros : : Publisher  pub = nh . advertise <geometry_msgs : : Twist
+>(
+14
+" t u r t l e 1 /cmd_vel" ,  1000) ;
+15
+16
+// Seed the random number generator .
+17
+srand ( time (0) ) ;
+18
+19
+// Loop at 2Hz until the node is shut down.
+20
+ros : : Rate  rate (2) ;
+21
+while ( ros : : ok () )  {
+22
+// Create and f i l l  in the message.  The other four
+23
+// fields , which are ignored by turtlesim , default to 0.
+24
+geometry_msgs : : Twist msg ;
+25
+msg . l i n e a r . x = double ( rand () ) / double (RAND_MAX) ;
+26
+msg . angular . z = 2* double ( rand () ) / double (RAND_MAX)
+-
+1;
+27
+28
+// Publish the message.
+29
+pub . publish (msg) ;
+30
+31
+// Send a message to rosout with the details .
+32
+ROS_INFO_STREAM( "Sending?random? v e l o c i t y ?command : "
+33
+<< "? l i n e a r=" << msg . l i n e a r . x
+34
+<< "? angular=" << msg . angular . z ) ;
+35
+36
+// Wait until  it 's time for another iteration .
+37
+rate . sleep () ;
+38
+}
+39
+}
